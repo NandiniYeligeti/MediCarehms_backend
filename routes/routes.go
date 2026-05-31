@@ -20,4 +20,21 @@ func Routes(api *gin.RouterGroup) {
 
 		doctor.DELETE("/:company_code/:id", DeleteDoctor)
 	}
+	//========staff======
+
+	staff := api.Group("/staff")
+	// staff.Use(middleware.AuthMiddleware())
+	{
+		staff.POST("/:company_code", CreateStaff)
+
+		staff.GET("/:company_code", GetStaffs)
+
+		staff.GET("/:company_code/:id", GetStaffByID)
+
+		staff.GET("/:company_code/entity/:entity_id", GetStaffByEntityID)
+
+		staff.PUT("/:company_code/:id", UpdateStaff)
+
+		staff.DELETE("/:company_code/:id", DeleteHospitalStaff)
+	}
 }
