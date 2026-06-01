@@ -119,15 +119,11 @@ func (s *hospitalStaffService) GetAll(
 // ================== GET STAFF BY ID ==================
 
 func (s *hospitalStaffService) GetByID(
-	ctx context.Context,
-	companyCode string,
-	id string,
-) (*models.HospitalStaff, error) {
+	ctx context.Context,companyCode string,	id string) (*models.HospitalStaff, error) {
 
 	db := storage.GetMongo()
 	collection := db.Database(
-		fmt.Sprintf("company_%s", companyCode),
-	).Collection(HospitalStaffCollection)
+		fmt.Sprintf("company_%s", companyCode)).Collection(HospitalStaffCollection)
 
 	filter := bson.M{
 		"entity_id":  id,
