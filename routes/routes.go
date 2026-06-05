@@ -37,37 +37,52 @@ func Routes(api *gin.RouterGroup) {
 
 		staff.DELETE("/:company_code/:id", DeleteHospitalStaff)
 	}
-//===ward====
+	//===ward====
 	ward := api.Group("/ward")
-// ward.Use(middleware.AuthMiddleware())
-{
-	ward.POST("/:company_code", CreateWard)
+	// ward.Use(middleware.AuthMiddleware())
+	{
+		ward.POST("/:company_code", CreateWard)
 
-	ward.GET("/:company_code", GetWards)
+		ward.GET("/:company_code", GetWards)
 
-	ward.GET("/:company_code/:id", GetWardByID)
+		ward.GET("/:company_code/:id", GetWardByID)
 
-	ward.GET("/:company_code/entity/:entity_id", GetWardByEntityID)
+		ward.GET("/:company_code/entity/:entity_id", GetWardByEntityID)
 
-	ward.PUT("/:company_code/:id", UpdateWard)
+		ward.PUT("/:company_code/:id", UpdateWard)
 
-	ward.DELETE("/:company_code/:id", DeleteWard)
-}
-//==========patient=======
-patient := api.Group("/patient")
-// patient.Use(middleware.AuthMiddleware())
-{
-	patient.POST("/:company_code", CreatePatient)
+		ward.DELETE("/:company_code/:id", DeleteWard)
+	}
+	//==========patient=======
+	patient := api.Group("/patient")
+	// patient.Use(middleware.AuthMiddleware())
+	{
+		patient.POST("/:company_code", CreatePatient)
 
-	patient.GET("/:company_code", GetPatients)
+		patient.GET("/:company_code", GetPatients)
 
-	patient.GET("/:company_code/:id", GetPatientByID)
+		patient.GET("/:company_code/:id", GetPatientByID)
 
-	patient.GET("/:company_code/entity/:entity_id", GetPatientByEntityID)
+		patient.GET("/:company_code/entity/:entity_id", GetPatientByEntityID)
 
-	patient.PUT("/:company_code/:id", UpdatePatient)
+		patient.PUT("/:company_code/:id", UpdatePatient)
 
-	patient.DELETE("/:company_code/:id", DeletePatient)
-}
+		patient.DELETE("/:company_code/:id", DeletePatient)
+	}
+	//============ birth certificate=====
+	birthcertificate := api.Group("/birthcertificate")
+	// birthcertificate.Use(middleware.AuthMiddleware())
+	{
+		birthcertificate.POST("/:company_code", CreateBirthCertificate)
 
+		birthcertificate.GET("/:company_code", GetBirthCertificates)
+
+		birthcertificate.GET("/:company_code/:id", GetBirthCertificateByID)
+
+		birthcertificate.GET("/:company_code/entity/:entity_id", GetBirthCertificateByEntityID)
+
+		birthcertificate.PUT("/:company_code/:id", UpdateBirthCertificate)
+
+		birthcertificate.DELETE("/:company_code/:id", DeleteBirthCertificate)
+	}
 }

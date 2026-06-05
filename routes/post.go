@@ -155,3 +155,39 @@ func CreatePatient(c *gin.Context){
 
 	c.JSON(http.StatusCreated, patient)
 }
+//======birth certificate ======
+func CreateBirthCertificate(c *gin.Context) {
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+	defer cancel()
+
+	// company code from URL
+	companyCode := c.Param("company_code")
+	if companyCode == "" {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "company_code is required",
+		})
+		return
+	}
+
+	// bind request
+	req := requests.NewCreateBirthCertificateRequest()
+	if err := req.Validate(c); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	// service call
+	service := services.NewBirthCertificateService()	
+
+	birthCertificate, err := service.Create(ctx, companyCode, req)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusCreated, birthCertificate)
+}	
