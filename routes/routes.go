@@ -53,4 +53,21 @@ func Routes(api *gin.RouterGroup) {
 
 	ward.DELETE("/:company_code/:id", DeleteWard)
 }
+//==========patient=======
+patient := api.Group("/patient")
+// patient.Use(middleware.AuthMiddleware())
+{
+	patient.POST("/:company_code", CreatePatient)
+
+	patient.GET("/:company_code", GetPatients)
+
+	patient.GET("/:company_code/:id", GetPatientByID)
+
+	patient.GET("/:company_code/entity/:entity_id", GetPatientByEntityID)
+
+	patient.PUT("/:company_code/:id", UpdatePatient)
+
+	patient.DELETE("/:company_code/:id", DeletePatient)
+}
+
 }

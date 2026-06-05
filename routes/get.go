@@ -2,6 +2,7 @@ package routes
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 	"time"
 
@@ -99,6 +100,7 @@ func GetDoctorByEntityID(c *gin.Context) {
 
 	c.JSON(http.StatusOK, data)
 }
+
 // ========= staff =======
 
 func GetStaffs(c *gin.Context) {
@@ -191,7 +193,8 @@ func GetStaffByEntityID(c *gin.Context) {
 
 	c.JSON(http.StatusOK, data)
 }
-//=========ward====
+
+// =========ward====
 func GetWards(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
@@ -283,3 +286,93 @@ func GetWardByEntityID(c *gin.Context) {
 	c.JSON(http.StatusOK, data)
 }
 
+// ========patient====
+func GetPatients(c *gin.Context) {
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+	defer cancel()
+
+	fmt.Println("Company Code:", c.Param("company_code"))
+
+	companyCode := c.Param("company_code")
+	if companyCode == "" {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "company_code is required"})
+		return
+	}
+
+	service := services.NewPatientService()
+
+	data, err := service.GetAll(ctx, companyCode)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, data)
+}
+
+func GetPatientByID(c *gin.Context) {
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+	defer cancel()
+
+	companyCode := c.Param("company_code")
+	if companyCode == "" {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "company_code is required",
+		})
+		return
+	}
+
+	id := c.Param("id")
+	if id == "" {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "id is required",
+		})
+		return
+	}
+
+	service := services.NewPatientService()
+
+	data, err := service.GetByID(ctx, companyCode, id)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, data)
+}
+
+func GetPatientByEntityID(c *gin.Context) {
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+	defer cancel()
+
+	companyCode := c.Param("company_code")
+	if companyCode == "" {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "company_code is required",
+		})
+		return
+	}
+
+	entityID := c.Param("entity_id")
+	if entityID == "" {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "entity_id is required",
+		})
+		return
+	}
+
+	service := services.NewPatientService()
+
+	data, err := service.GetByEntityID(ctx, companyCode, entityID)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, data)
+}
