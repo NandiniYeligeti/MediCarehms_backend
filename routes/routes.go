@@ -85,4 +85,15 @@ func Routes(api *gin.RouterGroup) {
 
 		birthcertificate.DELETE("/:company_code/:id", DeleteBirthCertificate)
 	}
+	//opd booking
+	opdbooking := api.Group("/opdbooking")
+	// opdbooking.Use(middleware.AuthMiddleware())
+	{
+		opdbooking.POST("/:company_code", CreateOPDBooking)
+		opdbooking.GET("/:company_code", GetOPDBookings)
+		opdbooking.GET("/:company_code/:id", GetOPDBookingByID)
+		opdbooking.GET("/:company_code/entity/:entity_id", GetOPDBookingByEntityID)
+		opdbooking.PUT("/:company_code/:id", UpdateOPDBooking)
+		opdbooking.DELETE("/:company_code/:id", DeleteOpdBooking)
+	}
 }

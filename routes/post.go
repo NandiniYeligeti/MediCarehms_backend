@@ -83,7 +83,8 @@ func CreateStaff(c *gin.Context) {
 
 	c.JSON(http.StatusCreated, staff)
 }
-//====ward ========
+
+// ====ward ========
 func CreateWard(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
@@ -119,8 +120,9 @@ func CreateWard(c *gin.Context) {
 
 	c.JSON(http.StatusCreated, ward)
 }
-//====patient====
-func CreatePatient(c *gin.Context){
+
+// ====patient====
+func CreatePatient(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
 
@@ -155,7 +157,8 @@ func CreatePatient(c *gin.Context){
 
 	c.JSON(http.StatusCreated, patient)
 }
-//======birth certificate ======
+
+// ======birth certificate ======
 func CreateBirthCertificate(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
@@ -179,7 +182,7 @@ func CreateBirthCertificate(c *gin.Context) {
 	}
 
 	// service call
-	service := services.NewBirthCertificateService()	
+	service := services.NewBirthCertificateService()
 
 	birthCertificate, err := service.Create(ctx, companyCode, req)
 	if err != nil {
@@ -190,4 +193,40 @@ func CreateBirthCertificate(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusCreated, birthCertificate)
-}	
+}
+
+// opd booking
+func CreateOPDBooking(c *gin.Context) {
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+	defer cancel()
+
+	companyCode := c.Param("company_code")
+	if companyCode == "" {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "company_code is required",
+		})
+		return
+	}
+
+	// bind request
+	req := requests.NewCreateOPDBookingRequest()
+	if err := req.Validate(c); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	// service call
+	service := services.NewOPDBookingService()
+
+	opdBooking, err := service.Create(ctx, companyCode, req)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusCreated, opdBooking)
+}
