@@ -1,12 +1,27 @@
 package routes
 
-import "github.com/gin-gonic/gin"
+import (
+	"github.com/NandiniYeligeti/MediCarehms_backend/middleware"
+	"github.com/gin-gonic/gin"
+)
 
 func Routes(api *gin.RouterGroup) {
+	api.POST("/auth/login", Login)
+	api.POST("/users/:company_code", CreateUserHandler)
+	api.GET("/users/:company_code", GetUsersHandler)
+	api.PUT("/users/:company_code/:id/password", ChangePasswordHandler)
+
+	// Super-admin routes
+	superAdmin := api.Group("/super-admin")
+	superAdmin.Use(middleware.AuthMiddleware())
+	{
+		superAdmin.GET("/companies", GetCompanies)
+		superAdmin.POST("/company", CreateCompany)
+	}
 
 	// ================= DOCTORS =================
 	doctor := api.Group("/doctor")
-	// doctor.Use(middleware.AuthMiddleware())
+	doctor.Use(middleware.AuthMiddleware())
 	{
 		doctor.POST("/:company_code", CreateDoctor)
 
@@ -23,7 +38,7 @@ func Routes(api *gin.RouterGroup) {
 	//========staff======
 
 	staff := api.Group("/staff")
-	// staff.Use(middleware.AuthMiddleware())
+	staff.Use(middleware.AuthMiddleware())
 	{
 		staff.POST("/:company_code", CreateStaff)
 
@@ -39,7 +54,7 @@ func Routes(api *gin.RouterGroup) {
 	}
 	//===ward====
 	ward := api.Group("/ward")
-	// ward.Use(middleware.AuthMiddleware())
+	ward.Use(middleware.AuthMiddleware())
 	{
 		ward.POST("/:company_code", CreateWard)
 
@@ -55,7 +70,7 @@ func Routes(api *gin.RouterGroup) {
 	}
 	//==========patient=======
 	patient := api.Group("/patient")
-	// patient.Use(middleware.AuthMiddleware())
+	patient.Use(middleware.AuthMiddleware())
 	{
 		patient.POST("/:company_code", CreatePatient)
 
@@ -71,7 +86,7 @@ func Routes(api *gin.RouterGroup) {
 	}
 	//============ birth certificate=====
 	birthcertificate := api.Group("/birthcertificate")
-	// birthcertificate.Use(middleware.AuthMiddleware())
+	birthcertificate.Use(middleware.AuthMiddleware())
 	{
 		birthcertificate.POST("/:company_code", CreateBirthCertificate)
 
@@ -87,7 +102,7 @@ func Routes(api *gin.RouterGroup) {
 	}
 	//opd booking
 	opdbooking := api.Group("/opdbooking")
-	// opdbooking.Use(middleware.AuthMiddleware())
+	opdbooking.Use(middleware.AuthMiddleware())
 	{
 		opdbooking.POST("/:company_code", CreateOPDBooking)
 		opdbooking.GET("/:company_code", GetOPDBookings)

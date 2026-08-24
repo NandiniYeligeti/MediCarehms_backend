@@ -7,7 +7,9 @@ import (
 	"os"
 	"time"
 
+	"github.com/NandiniYeligeti/MediCarehms_backend/middleware"
 	"github.com/NandiniYeligeti/MediCarehms_backend/routes"
+	"github.com/NandiniYeligeti/MediCarehms_backend/seed"
 	"github.com/NandiniYeligeti/MediCarehms_backend/storage"
 
 	"github.com/gin-contrib/cors"
@@ -22,7 +24,7 @@ func main() {
 	}
 
 	// Initialize JWT secret from env
-	// middleware.InitJWT()
+	middleware.InitJWT()
 
 	// Connect to MongoDB
 	if err := storage.InitMongo(); err != nil {
@@ -30,11 +32,8 @@ func main() {
 	}
 	fmt.Println("MongoDB connected")
 
-	// // Initialize Vault-backed JWT signer and cache public key
-	// if err := jwtmanager.InitVaultJWT(); err != nil {
-	// 	log.Fatalf("JWT initialization failed: %v", err)
-	// }
-	// fmt.Println("✅ JWT signer initialized")
+	// Run seeders after successful mongo connection
+	seed.EnsureSuperAdmin()
 
 	// Create main app router
 	app := gin.Default()
@@ -62,7 +61,7 @@ func main() {
 	}))
 
 	// Logging middleware
-	// app.Use(middleware.LogMiddleware())
+	app.Use(middleware.LogMiddleware())
 	app.Use(gin.Recovery())
 
 	// API group
